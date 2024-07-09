@@ -1,20 +1,24 @@
 language: python
 python:
-      - '3.9'
-
-before_script:
-      - pip install -r requirements.txt
-
-branches:
-    only:
-      - stagging
-
-env: DJANGO_SETTINGS_MODULE="django_web_app.settings.travis"
+  - '3.9'  # Utilisez une version plus récente de Python si possible
 
 services:
-      - postgresql
+  - postgresql
+
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE=django_web_app.settings.travis
+    - DATABASE_URL=postgres://postgres@localhost/test_db
+
+before_install:
+  - pip install --upgrade pip
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database test_db;' -U postgres  # Crée la base de données test
 
 script:
-      - python manage.py migrate
-      - python manage.py test
-      - ./manage.py test
+  - python manage.py migrate
+  - python manage.py test
