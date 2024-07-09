@@ -23,5 +23,9 @@ before_script:
 script:
   - cd django_web_app
   - python manage.py makemigrations
-  - python manage.py migrate
+  - python manage.py migrate --noinput
+  - python manage.py collectstatic --noinput
+  - python manage.py check
+
+
 #   - python manage.py test
